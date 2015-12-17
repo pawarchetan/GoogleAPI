@@ -1,0 +1,13 @@
+Technology/Tools Used :
+1. Java 7
+2. HTML/JavaScript/JQuery/AJAX/CSS
+3. IntellijIDE
+4. JUnit 3.8.1
+5. Spring/Spring MVC 4.2.2.RELEASE
+6. Hibernate 4.3.11.Final
+7. Jackson 2.5.0 (To deal with JSON)
+8. WebServices : REST (REST Enabled Spring MVC using @RestController annotation)
+9. Google Map API
+10. MySQL
+11. Log4j2 (For logging Purpose)
+

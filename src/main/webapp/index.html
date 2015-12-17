@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Loginext First Question</title>
+    <style type="text/css">
+        #myCustomMap {
+            max-width: 90%;
+            max-height: 65%;
+            margin-left: auto;
+            margin-bottom: auto;
+            margin-right: auto;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+        google.maps.event.addDomListener(window, 'load', start);
+        var map;
+
+        function start() {
+            var url = "/loginext/GoogleAPI/getAllCoordinates";
+            $.ajax({
+                type: 'GET',
+                url: url,
+                async: false,
+                encode: true
+            }).success(function (coordinates) {
+                if (coordinates.length > 0) {
+                    console.log(coordinates);
+                    showMap(coordinates);
+                }
+            });
+        }
+
+        function showMap(coordinates) {
+            var map = new google.maps.Map(document.getElementById('myCustomMap'), {
+                zoom: 4,
+                center: new google.maps.LatLng(21.0000, 78.0000),
+                mapTypeControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            var marker, i;
+
+            for (i = 0; i < coordinates.length; i++) {
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(Number.parseInt(coordinates[i].latitude),
+                            Number.parseInt(coordinates[i].longitude)),
+                    map: map
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+<h3 style="text-align: center;">Loginext First Question</h3>
+
+<div id="myCustomMap" style="width: 900px; height: 500px;"></div>
+</body>
+</html>

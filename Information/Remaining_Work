@@ -1,0 +1,6 @@
+Below Things which we can used to improve the overall design and Its in Progress :
+
+1. Migrating the REST Enabled Spring MVC to Pure REST Controller (By using Jersey) with Spring.
+2. Junit test cases for testing :
+   i. CRUD operations
+   ii. Annotation based configuration of the Hibernate and Spring MVC or REST configuration.

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Catalog Search Page</title>
+    <style type="text/css">
+        #myCustomMap {
+            max-width: 90%;
+            max-height: 65%;
+            margin-left: 25%;
+            margin-bottom: 40%;
+            margin-right: auto;
+        }
+
+        table {
+            table-collapse: collapse;
+            border-spacing: 0;
+            margin-left: 40px;
+        }
+
+        td {
+            border: 2px groove rgb(0, 0, 0);
+            padding: 7px;
+            background-color: rgb(204, 255, 204);
+        }
+
+        th {
+            border: 2px groove rgb(0, 0, 0);
+            padding: 7px;
+            background-color: rgb(255, 255, 204);
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+        google.maps.event.addDomListener(window, 'load', start);
+        var mapToShow;
+        var coordinatesToPlot;
+
+        function start() {
+            var url = "/loginext/GoogleAPI/getAllCoordinates";
+            $.ajax({
+                type: 'GET',
+                url: url,
+                async: false,
+                encode: true
+            }).success(function (coordinates) {
+                coordinatesToPlot = coordinates;
+                console.log(coordinatesToPlot);
+                showMap();
+            });
+        }
+
+        function showMap() {
+            mapToShow = new google.maps.Map(document.getElementById('myCustomMap'), {
+                zoom: 4,
+                center: new google.maps.LatLng(21.0000, 78.0000), //Center of the India
+                mapTypeControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+        }
+
+        function drawTable(tbody) {
+            var i;
+            var tr, td;
+            tbody = document.getElementById(tbody);
+            for (i = 0; i < coordinatesToPlot.length; i++) {
+                tr = tbody.insertRow(tbody.rows.length);
+                td = tr.insertCell(tr.cells.length);
+                td.innerHTML = coordinatesToPlot[i].id;
+
+                td = tr.insertCell(tr.cells.length);
+                td.innerHTML = coordinatesToPlot[i].latitude;
+
+                td = tr.insertCell(tr.cells.length);
+                td.innerHTML = coordinatesToPlot[i].longitude;
+            }
+            addRowHandlers();
+        }
+
+        function addRowHandlers() {
+            var i;
+            var currentRow;
+            var createClickHandler;
+            var table = document.getElementById("positionTable");
+            var rows = table.getElementsByTagName("tr");
+            for (i = 0; i < rows.length; i++) {
+                currentRow = table.rows[i];
+                createClickHandler =
+                        function (row) {
+                            return function () {
+                                var marker;
+                                var latitude = row.getElementsByTagName("td")[1].innerHTML;
+                                var longitude = row.getElementsByTagName("td")[2].innerHTML;
+                                console.log("You clicked Latitude:" + latitude + "and Longitude:" + longitude);
+                                marker = new google.maps.Marker({
+                                    position: new google.maps.LatLng(Number.parseInt(latitude), Number.parseInt(longitude)),
+                                    map: mapToShow
+                                });
+                            };
+                        };
+                currentRow.onclick = createClickHandler(currentRow);
+            }
+        }
+    </script>
+</head>
+<body onload="drawTable('matchData')">
+<h3 style="text-align: center;">Loginext Second Question</h3>
+
+<div style="float: left;">
+    <table id="positionTable" border=1>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+        </tr>
+        </thead>
+        <tbody id="matchData">
+        </tbody>
+    </table>
+</div>
+<div id="myCustomMap" style="width: 900px; height: 500px;"></div>
+</body>
+</html>
